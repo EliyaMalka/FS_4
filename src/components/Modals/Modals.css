@@ -1,0 +1,216 @@
+/* ===================================
+   Modal Styles
+   =================================== */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal-backdrop);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-lg);
+  min-width: 380px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: scaleIn 0.25s ease;
+  z-index: var(--z-modal);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+  background: rgba(239, 83, 80, 0.15);
+  color: var(--accent-danger);
+  border-color: rgba(239, 83, 80, 0.3);
+}
+
+.modal-body {
+  margin-bottom: var(--space-lg);
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-family: var(--font-primary);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.modal-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.15);
+}
+
+.modal-input + .modal-input {
+  margin-top: var(--space-sm);
+}
+
+.modal-footer {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  padding: 8px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.modal-btn.primary {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+.modal-btn.primary:hover {
+  background: var(--accent-primary-hover);
+  transform: translateY(-1px);
+}
+
+.modal-btn.secondary {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.modal-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.modal-btn.danger {
+  background: var(--accent-danger);
+  border-color: var(--accent-danger);
+  color: white;
+}
+
+.modal-btn.danger:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Save Prompt specific */
+.save-prompt-message {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.save-prompt-message strong {
+  color: var(--text-primary);
+}
+
+/* Open File Dialog */
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.file-list-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: var(--space-xl);
+  font-size: 0.9rem;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.file-item:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-card-hover);
+}
+
+.file-item-name {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.file-item-meta {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* Find & Replace */
+.find-replace-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.find-replace-row label {
+  min-width: 60px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.find-replace-results {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: var(--space-sm) 0;
+}

@@ -1,0 +1,150 @@
+/* ===================================
+   Document Grid Styles
+   =================================== */
+
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-sm);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Document Card */
+.doc-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+.doc-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.doc-card:hover {
+  border-color: var(--border-color-hover);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.doc-card:hover::before {
+  opacity: 1;
+}
+
+.doc-card.active {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-glow);
+}
+
+.doc-card.active::before {
+  opacity: 1;
+}
+
+/* Card Header */
+.doc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.doc-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.doc-card-close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.doc-card-close:hover {
+  background: rgba(239, 83, 80, 0.15);
+  color: var(--accent-danger);
+}
+
+/* Card Body — text preview */
+.doc-card-preview {
+  flex: 1;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  overflow: hidden;
+  word-wrap: break-word;
+  font-family: var(--font-mono);
+  background: var(--bg-surface);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-xs);
+  max-height: 45px;
+}
+
+.doc-card-preview-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-primary);
+}
+
+/* Card Footer */
+.doc-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.doc-card-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.doc-card-badge {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 500;
+}
+
+.doc-card-badge.active {
+  background: rgba(108, 99, 255, 0.15);
+  color: var(--accent-primary);
+}
+
+.doc-card-badge.unsaved {
+  background: rgba(255, 167, 38, 0.15);
+  color: var(--accent-warning);
+}

@@ -1,0 +1,84 @@
+/* ===================================
+   Editor Styles
+   =================================== */
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Text Display Area */
+.text-display-wrapper {
+  padding: var(--space-xs) var(--space-md);
+  max-height: 120px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 1;
+}
+
+.text-display-wrapper.expanded {
+  max-height: 50vh;
+  flex: 1;
+}
+
+.text-display {
+  min-height: 60px;
+  padding: var(--space-md);
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: 18px;
+  line-height: 1.6;
+  cursor: text;
+  position: relative;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  transition: border-color var(--transition-fast);
+  outline: none;
+}
+
+.text-display:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.1);
+}
+
+.text-display.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Individual character spans */
+.char-span {
+  white-space: pre;
+  transition: background-color var(--transition-fast);
+}
+
+.char-span.highlighted {
+  background-color: rgba(255, 167, 38, 0.35);
+  border-radius: 2px;
+}
+
+/* Cursor */
+.cursor-blink {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: var(--accent-primary);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+  margin: 0 -1px;
+  position: relative;
+  z-index: 1;
+}
+
+/* No document selected state */
+.editor-no-doc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  gap: var(--space-sm);
+}

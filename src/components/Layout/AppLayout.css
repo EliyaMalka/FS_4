@@ -1,0 +1,186 @@
+/* ===================================
+   App Layout Styles
+   =================================== */
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* Top Bar */
+.app-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 52px;
+  z-index: 10;
+}
+
+.app-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.app-brand-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--gradient-primary);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.app-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.app-user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.app-user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: white;
+  text-transform: uppercase;
+}
+
+.app-logout-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.app-logout-btn:hover {
+  border-color: var(--accent-danger);
+  color: var(--accent-danger);
+  background: rgba(239, 83, 80, 0.1);
+}
+
+/* Content Area */
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Document Grid Section (Top) */
+.app-doc-grid-section {
+  flex: 0 1 auto;
+  min-height: 100px;
+  max-height: 30vh;
+  overflow-y: auto;
+  padding: var(--space-sm) var(--space-md);
+  transition: flex var(--transition-base);
+}
+
+.app-doc-grid-section.expanded {
+  flex: 1 1 auto;
+  max-height: 50vh;
+}
+
+/* Editor Section (Bottom) */
+.app-editor-section {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-color);
+  background: rgba(22, 33, 62, 0.5);
+  transition: all var(--transition-base);
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.app-editor-section.keyboard-hidden {
+  /* When keyboard hidden, editor gets more space */
+}
+
+/* Empty State */
+.app-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--space-2xl);
+}
+
+.app-empty-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.app-empty-state h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.app-empty-state p {
+  font-size: 0.9rem;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+.app-empty-btn {
+  padding: 10px 24px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  margin-top: var(--space-sm);
+}
+
+.app-empty-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}

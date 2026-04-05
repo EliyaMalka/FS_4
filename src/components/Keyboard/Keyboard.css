@@ -1,0 +1,143 @@
+/* ===================================
+   Virtual Keyboard Styles
+   =================================== */
+
+.keyboard-container {
+  padding: 4px var(--space-sm) 6px;
+  background: rgba(15, 15, 26, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-color);
+  animation: slideUp 0.3s ease;
+  flex-shrink: 0;
+}
+
+.keyboard-container.hidden {
+  display: none;
+}
+
+/* Keyboard Rows */
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+/* Individual Key */
+.kb-key {
+  min-width: 34px;
+  height: 32px;
+  padding: 2px 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.kb-key:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.kb-key:active {
+  transform: translateY(1px);
+  background: rgba(108, 99, 255, 0.2);
+}
+
+/* Special Keys */
+.kb-key.wide {
+  min-width: 64px;
+  font-size: 0.7rem;
+}
+
+.kb-key.extra-wide {
+  min-width: 100px;
+  font-size: 0.7rem;
+}
+
+.kb-key.space {
+  flex: 1;
+  max-width: 300px;
+}
+
+.kb-key.active {
+  background: rgba(108, 99, 255, 0.2);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.kb-key.enter {
+  background: rgba(0, 212, 170, 0.1);
+  border-color: rgba(0, 212, 170, 0.3);
+}
+
+.kb-key.enter:hover {
+  background: rgba(0, 212, 170, 0.2);
+  border-color: var(--accent-secondary);
+}
+
+.kb-key.backspace {
+  background: rgba(239, 83, 80, 0.08);
+  border-color: rgba(239, 83, 80, 0.2);
+}
+
+.kb-key.backspace:hover {
+  background: rgba(239, 83, 80, 0.15);
+  border-color: var(--accent-danger);
+}
+
+/* Bottom row with special keys */
+.keyboard-bottom-row {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+/* Emoji Panel */
+.emoji-panel {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+  padding: var(--space-sm);
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--space-sm);
+  border: 1px solid var(--border-color);
+}
+
+.emoji-btn {
+  width: 100%;
+  aspect-ratio: 1;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.emoji-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-color);
+  transform: scale(1.15);
+}
+
+.emoji-btn:active {
+  transform: scale(0.95);
+}
