@@ -1,11 +1,69 @@
+import { useState } from 'react';
 import './DocumentGrid.css';
 
-function DocumentCard({ doc, isActive, onSelect, onClose, hasUnsaved }) {
-  const previewText = doc.chars.map(c => c.char).join('').substring(0, 200);
+function StyledPreview({ chars }) {
+  if (!chars || chars.length === 0) {
+    return <span className="doc-card-preview-empty">Empty document</span>;
+  }
+
+  // Show up to 120 characters with their actual styles
+  const previewChars = chars.slice(0, 120);
+
+  return (
+    <>
+      {previewChars.map((ch, i) => {
+        if (ch.char === '\n') {
+          return <br key={ch.id || i} />;
+        }
+        const style = {
+          color: ch.color || '#e8e8f0',
+          fontSize: Math.min(parseInt(ch.fontSize) || 14, 14) + 'px', // cap at 14px for preview
+          fontFamily: ch.fontFamily || 'inherit',
+          fontWeight: ch.bold ? 'bold' : 'normal',
+          fontStyle: ch.italic ? 'italic' : 'normal',
+          textDecoration: ch.underline ? 'underline' : 'none',
+        };
+        return (
+          <span key={ch.id || i} style={style}>
+            {ch.char}
+          </span>
+        );
+      })}
+      {chars.length > 120 && <span style={{ color: 'var(--text-muted)' }}>…</span>}
+    </>
+  );
+}
+
+function DocumentCard({ doc, isActive, onSelect, onClose, hasUnsaved, onRename }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState(doc.name);
 
   const handleClose = (e) => {
     e.stopPropagation();
     onClose(doc.id);
+  };
+
+  const handleDoubleClick = (e) => {
+    e.stopPropagation();
+    setEditName(doc.name);
+    setIsEditing(true);
+  };
+
+  const handleRenameSubmit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const trimmed = editName.trim();
+    if (trimmed && trimmed !== doc.name) {
+      onRename(doc.id, trimmed);
+    }
+    setIsEditing(false);
+  };
+
+  const handleRenameKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      setIsEditing(false);
+      setEditName(doc.name);
+    }
   };
 
   const charCount = doc.chars.length;
@@ -18,7 +76,28 @@ function DocumentCard({ doc, isActive, onSelect, onClose, hasUnsaved }) {
       id={`doc-card-${doc.id}`}
     >
       <div className="doc-card-header">
-        <span className="doc-card-title">{doc.name}</span>
+        {isEditing ? (
+          <form onSubmit={handleRenameSubmit} className="doc-card-rename-form" onClick={e => e.stopPropagation()}>
+            <input
+              className="doc-card-rename-input"
+              type="text"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              onBlur={handleRenameSubmit}
+              onKeyDown={handleRenameKeyDown}
+              autoFocus
+              maxLength={30}
+            />
+          </form>
+        ) : (
+          <span
+            className="doc-card-title"
+            onDoubleClick={handleDoubleClick}
+            title="Double-click to rename"
+          >
+            {doc.name}
+          </span>
+        )}
         <button
           className="doc-card-close"
           onClick={handleClose}
@@ -28,8 +107,8 @@ function DocumentCard({ doc, isActive, onSelect, onClose, hasUnsaved }) {
         </button>
       </div>
 
-      <div className={`doc-card-preview ${!previewText ? 'doc-card-preview-empty' : ''}`}>
-        {previewText || 'Empty document'}
+      <div className="doc-card-preview">
+        <StyledPreview chars={doc.chars} />
       </div>
 
       <div className="doc-card-footer">
@@ -45,7 +124,7 @@ function DocumentCard({ doc, isActive, onSelect, onClose, hasUnsaved }) {
   );
 }
 
-export default function DocumentGrid({ docs, activeDocId, onSelect, onClose, hasUnsavedChanges }) {
+export default function DocumentGrid({ docs, activeDocId, onSelect, onClose, hasUnsavedChanges, onRename }) {
   if (docs.length === 0) return null;
 
   return (
@@ -58,6 +137,7 @@ export default function DocumentGrid({ docs, activeDocId, onSelect, onClose, has
           onSelect={onSelect}
           onClose={onClose}
           hasUnsaved={hasUnsavedChanges(doc.id)}
+          onRename={onRename}
         />
       ))}
     </div>

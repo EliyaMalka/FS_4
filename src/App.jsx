@@ -26,6 +26,7 @@ export default function App() {
   const [showSaveAsDialog, setShowSaveAsDialog] = useState(false);
   const [showFindReplace, setShowFindReplace] = useState(false);
   const [pendingCloseDocId, setPendingCloseDocId] = useState(null);
+  const [editorVisible, setEditorVisible] = useState(true);
 
   // --- Documents ---
   const docManager = useDocuments(user);
@@ -42,6 +43,7 @@ export default function App() {
     closeDocument,
     updateActiveDocChars,
     hasUnsavedChanges,
+    renameDocument,
   } = docManager;
 
   // --- Editor State ---
@@ -50,7 +52,19 @@ export default function App() {
   // --- File Toolbar Handlers ---
   const handleNew = useCallback(() => {
     newDocument();
+    setEditorVisible(true);
   }, [newDocument]);
+
+  // Select a document — auto-show editor
+  const handleSelectDoc = useCallback((docId) => {
+    setActiveDocId(docId);
+    setEditorVisible(true);
+  }, [setActiveDocId]);
+
+  // Toggle editor visibility
+  const handleToggleEditor = useCallback(() => {
+    setEditorVisible(prev => !prev);
+  }, []);
 
   const handleOpen = useCallback(() => {
     setShowOpenDialog(true);
@@ -150,6 +164,8 @@ export default function App() {
         hasOpenDocs={openDocs.length > 0}
         onNewDocument={handleNew}
         showKeyboard={editorState.showKeyboard}
+        editorVisible={editorVisible}
+        onToggleEditor={handleToggleEditor}
         toolbar={
           <FileToolbar
             onNew={handleNew}
@@ -164,9 +180,10 @@ export default function App() {
           <DocumentGrid
             docs={openDocs}
             activeDocId={activeDocId}
-            onSelect={setActiveDocId}
+            onSelect={handleSelectDoc}
             onClose={handleClose}
             hasUnsavedChanges={hasUnsavedChanges}
+            onRename={renameDocument}
           />
         }
         editor={

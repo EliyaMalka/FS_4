@@ -112,12 +112,18 @@
   max-height: 30vh;
   overflow-y: auto;
   padding: var(--space-sm) var(--space-md);
-  transition: flex var(--transition-base);
+  transition: all var(--transition-base);
 }
 
 .app-doc-grid-section.expanded {
   flex: 1 1 auto;
   max-height: 50vh;
+}
+
+.app-doc-grid-section.full-view {
+  flex: 1 1 auto;
+  max-height: none;
+  padding: var(--space-md);
 }
 
 /* Editor Section (Bottom) */
@@ -130,10 +136,46 @@
   transition: all var(--transition-base);
   min-height: 0;
   overflow-y: auto;
+  animation: slideUp 0.25s ease;
 }
 
-.app-editor-section.keyboard-hidden {
-  /* When keyboard hidden, editor gets more space */
+/* Editor Section Header with Close Button */
+.editor-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px var(--space-md);
+  background: rgba(108, 99, 255, 0.06);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.editor-section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.editor-close-btn {
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.editor-close-btn:hover {
+  background: rgba(239, 83, 80, 0.15);
+  border-color: rgba(239, 83, 80, 0.3);
+  color: var(--accent-danger);
 }
 
 /* Empty State */

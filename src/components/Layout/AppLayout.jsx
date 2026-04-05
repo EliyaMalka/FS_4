@@ -10,6 +10,8 @@ export default function AppLayout({
   showKeyboard,
   hasOpenDocs,
   onNewDocument,
+  editorVisible,
+  onToggleEditor,
 }) {
   return (
     <div className="app-layout">
@@ -49,15 +51,29 @@ export default function AppLayout({
         ) : (
           <>
             {/* Document Grid (Top Area) */}
-            <div className={`app-doc-grid-section ${!showKeyboard ? 'expanded' : ''}`}>
+            <div className={`app-doc-grid-section ${!editorVisible ? 'full-view' : ''} ${!showKeyboard ? 'expanded' : ''}`}>
               {documentGrid}
             </div>
 
-            {/* Editor Section (Bottom Area) */}
-            <div className={`app-editor-section ${!showKeyboard ? 'keyboard-hidden' : ''}`}>
-              {editor}
-              {keyboard}
-            </div>
+            {/* Editor Section (Bottom Area) — only when visible */}
+            {editorVisible && (
+              <div className={`app-editor-section ${!showKeyboard ? 'keyboard-hidden' : ''}`}>
+                {/* Close Editor Button */}
+                <div className="editor-section-header">
+                  <span className="editor-section-title">✎ Editor</span>
+                  <button
+                    className="editor-close-btn"
+                    onClick={onToggleEditor}
+                    title="Close editor panel"
+                    id="btn-close-editor"
+                  >
+                    ✕
+                  </button>
+                </div>
+                {editor}
+                {keyboard}
+              </div>
+            )}
           </>
         )}
       </div>
