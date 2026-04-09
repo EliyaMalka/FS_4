@@ -1,6 +1,22 @@
-/* ===================================
-   Storage Utility — LocalStorage helpers
-   =================================== */
+/**
+ * ==============================================
+ * storage.js — ניהול אחסון מקומי (LocalStorage)
+ * ==============================================
+ * קובץ זה מנהל את כל הקריאה/כתיבה לאחסון המקומי של הדפדפן.
+ * הנתונים נשמרים גם אחרי סגירת הדפדפן ופתיחתו מחדש.
+ *
+ * מבנה הנתונים ב-LocalStorage:
+ *   - vte_users — מערך של אובייקטי משתמשים [{username, password}, ...]
+ *   - vte_docs_{username} — מערך מסמכים שמורים של כל משתמש
+ *   - vte_session_{username} — מצב הסשן (פתקים פתוחים, גם אם לא נשמרו)
+ *
+ * פונקציות עיקריות:
+ *   - registerUser(username, password) — רישום משתמש חדש
+ *   - validateUser(username, password) — אימות שם משתמש וסיסמא
+ *   - getUserDocuments(username) — שליפת כל המסמכים השמורים של משתמש
+ *   - saveDocument(username, doc) — שמירת מסמך (חדש או עדכון קיים)
+ *   - deleteDocument(username, docId) — מחיקת מסמך לצמיתות
+ */
 
 const USERS_KEY = 'vte_users';
 const CURRENT_USER_KEY = 'vte_currentUser';
@@ -9,23 +25,13 @@ const DOCS_PREFIX = 'vte_docs_';
 // --- User Auth ---
 
 /**
- * Get all users. Returns array of { username, password } objects.
- * Auto-migrates old format (plain string array) to new format.
+ * שליפת כל המשתמשים. מחזיר מערך של אובייקטי { username, password }.
  */
 export function getUsers() {
   try {
     const data = localStorage.getItem(USERS_KEY);
     if (!data) return [];
-    const parsed = JSON.parse(data);
-
-    // Migration: if old format (array of strings), convert to objects
-    if (parsed.length > 0 && typeof parsed[0] === 'string') {
-      const migrated = parsed.map(name => ({ username: name, password: '1234' }));
-      saveUsers(migrated);
-      return migrated;
-    }
-
-    return parsed;
+    return JSON.parse(data);
   } catch {
     return [];
   }

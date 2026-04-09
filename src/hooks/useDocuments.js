@@ -1,3 +1,29 @@
+/**
+ * ==============================================
+ * useDocuments.js — הוק ניהול מסמכים
+ * ==============================================
+ * הוק מותאם אישית שמנהל את מחזור החיים של מסמכים: יצירה, פתיחה, שמירה, סגירה ומחיקה.
+ * כל משתמש מנהל מסמכים נפרדים — מבודד לגמרי ממשתמשים אחרים.
+ *
+ * מצב (State):
+ *   - openDocs — מערך המסמכים הפתוחים כרגע (כולל כאלה שלא נשמרו)
+ *   - activeDocId — מזהה המסמך שנמצא בעריכה
+ *   - activeDoc — אובייקט המסמך הפעיל (נגזר מ-openDocs)
+ *
+ * שמירת סשן (Session Persistence):
+ *   המסמכים הפתוחים נשמרים אוטומטית ב-LocalStorage (vte_session_{username})
+ *   כך שגם אם המשתמש סוגר את הדפדפן, כשהוא חוזר — הוא רואה את המסמכים שעבד עליהם.
+ *
+ * פונקציות עיקריות:
+ *   - newDocument(name) — יצירת מסמך חדש ריק
+ *   - openDocument(doc) — פתיחת מסמך שמור
+ *   - save(doc) — שמירת מסמך ל-LocalStorage
+ *   - saveAs(newName) — שמירה בשם אחר (יוצר עותק)
+ *   - closeDocument(docId) — סגירת מסמך
+ *   - renameDocument(docId, newName) — שינוי שם מסמך
+ *   - hasUnsavedChanges(docId) — בדיקה אם יש שינויים שלא נשמרו
+ *   - deleteDocumentPermanently(docId) — מחיקה מ-LocalStorage לצמיתות
+ */
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { getUserDocuments, saveDocument, deleteDocument as deleteDocFromStorage } from '../utils/storage';
 import { createDocument } from '../utils/charFactory';

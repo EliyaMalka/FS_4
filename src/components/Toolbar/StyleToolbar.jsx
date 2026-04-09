@@ -1,3 +1,17 @@
+/**
+ * ==============================================
+ * StyleToolbar.jsx — סרגל עיצוב טקסט
+ * ==============================================
+ * סרגל הכלים שמאפשר לשנות את העיצוב של הטקסט:
+ *
+ *   - Font Family — תפריט בחירת גופן (Arial, Times New Roman, וכו')
+ *   - Font Size — תפריט בחירת גודל טקסט (12px עד 48px)
+ *   - Bold / Italic / Underline — כפתורי מתג להפעלה/כיבוי
+ *   - Color Picker — בוחר צבע לטקסט (input type="color")
+ *   - Scope Toggle — מתג "Apply to All" / "From Here On":
+ *     * Apply to All — כל שינוי עיצוב משפיע על כל הטקסט הקיים
+ *     * From Here On — שינוי עיצוב משפיע רק על טקסט חדש שיוקלד
+ */
 import { FONT_FAMILIES, FONT_SIZES, STYLE_SCOPE } from '../../utils/constants';
 import './Toolbar.css';
 

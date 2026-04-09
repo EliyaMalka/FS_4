@@ -1,3 +1,33 @@
+/**
+ * ==============================================
+ * useEditorState.js — הוק מצב העורך (הליבה של העריכה)
+ * ==============================================
+ * זהו ההוק המרכזי והחשוב ביותר — הוא מנהל את כל הלוגיקה של עריכת טקסט:
+ *
+ * מצב (State):
+ *   - cursorPosition — מיקום הסמן המהבהב (מספר)
+ *   - activeStyle — הסטייל הנוכחי (צבע, גופן, גודל, bold, italic, underline)
+ *   - styleScope — טווח החלת סטייל: ALL (על הכל) או FROM_HERE (רק טקסט חדש)
+ *   - language — שפה נוכחית (english/hebrew)
+ *   - showKeyboard — האם המקלדת הווירטואלית מוצגת
+ *   - shiftActive — האם מצב Shift פעיל
+ *   - findHighlights — מערך אינדקסים של תווים שנמצאו בחיפוש
+ *
+ * פעולות עריכה:
+ *   - insertChar(char) — הכנסת תו במיקום הסמן
+ *   - deleteCharBefore() — מחיקת תו אחד (Backspace)
+ *   - deleteWordBefore() — מחיקת מילה שלמה (Ctrl+Backspace)
+ *   - clearAll() — מחיקת כל הטקסט
+ *   - undo() — ביטול פעולה אחרונה (שומר עד 50 פעולות)
+ *
+ * פעולות סטייל:
+ *   - applyStyleChange(prop, value) — שינוי עיצוב (צבע, גופן, וכו')
+ *   - toggleStyleProp(prop) — הפעלה/כיבוי של bold/italic/underline
+ *
+ * חיפוש והחלפה:
+ *   - findInText(str) — חיפוש מחרוזת בטקסט והדגשת התוצאות
+ *   - replaceInText(find, replace) — החלפת כל המופעים
+ */
 import { useState, useCallback, useRef } from 'react';
 import { createCharObject, DEFAULT_STYLE } from '../utils/charFactory';
 import { STYLE_SCOPE } from '../utils/constants';
