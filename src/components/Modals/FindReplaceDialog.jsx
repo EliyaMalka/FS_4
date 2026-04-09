@@ -68,9 +68,9 @@ export default function FindReplaceDialog({ onFind, onReplace, onClose, resultCo
             Close
           </button>
           <button
-            className="modal-btn primary"
+            className={`modal-btn ${resultCount > 0 ? 'primary' : 'disabled-replace'}`}
             onClick={handleReplace}
-            disabled={!findStr.trim()}
+            disabled={!findStr.trim() || resultCount === 0}
             id="btn-replace-all"
           >
             Replace All

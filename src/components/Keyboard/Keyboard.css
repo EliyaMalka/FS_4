@@ -3,36 +3,45 @@
    =================================== */
 
 .keyboard-container {
-  padding: 4px var(--space-sm) 6px;
+  padding: 6px var(--space-md) 10px;
   background: rgba(15, 15, 26, 0.95);
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--border-color);
   animation: slideUp 0.3s ease;
   flex-shrink: 0;
+  /* המקלדת תתפוס בערך רבע מגובה המסך */
+  min-height: 22vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
 }
 
 .keyboard-container.hidden {
   display: none;
 }
 
-/* Keyboard Rows */
+/* Keyboard Rows — כל שורה מתפרשת על מלוא הרוחב */
 .keyboard-row {
   display: flex;
   justify-content: center;
-  gap: 3px;
-  margin-bottom: 3px;
+  gap: 4px;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 var(--space-xs);
 }
 
-/* Individual Key */
+/* Individual Key — כפתור בודד, מתרחב למלא את הרוחב */
 .kb-key {
-  min-width: 34px;
-  height: 32px;
-  padding: 2px 6px;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 38px;
+  padding: 2px 4px;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-sm);
   color: var(--text-primary);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-family: var(--font-primary);
   cursor: pointer;
   display: flex;
@@ -54,20 +63,20 @@
   background: rgba(108, 99, 255, 0.2);
 }
 
-/* Special Keys */
+/* Special Keys — כפתורים רחבים (Shift, Backspace, Tab) */
 .kb-key.wide {
-  min-width: 64px;
-  font-size: 0.7rem;
+  flex: 1.8 1 0;
+  font-size: 0.75rem;
 }
 
 .kb-key.extra-wide {
-  min-width: 100px;
-  font-size: 0.7rem;
+  flex: 2.5 1 0;
+  font-size: 0.75rem;
 }
 
+/* Space bar — רחב במיוחד */
 .kb-key.space {
-  flex: 1;
-  max-width: 300px;
+  flex: 5 1 0;
 }
 
 .kb-key.active {
@@ -100,8 +109,10 @@
 .keyboard-bottom-row {
   display: flex;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   margin-top: 2px;
+  width: 100%;
+  padding: 0 var(--space-xs);
 }
 
 /* Emoji Panel */

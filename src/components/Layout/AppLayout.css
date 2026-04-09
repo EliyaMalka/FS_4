@@ -105,11 +105,11 @@
   min-height: 0;
 }
 
-/* Document Grid Section (Top) */
+/* Document Grid Section (Top ~50%) */
 .app-doc-grid-section {
   flex: 0 1 auto;
-  min-height: 100px;
-  max-height: 30vh;
+  min-height: 80px;
+  max-height: 22vh;
   overflow-y: auto;
   padding: var(--space-sm) var(--space-md);
   transition: all var(--transition-base);
@@ -117,7 +117,7 @@
 
 .app-doc-grid-section.expanded {
   flex: 1 1 auto;
-  max-height: 50vh;
+  max-height: 45vh;
 }
 
 .app-doc-grid-section.full-view {
@@ -126,7 +126,7 @@
   padding: var(--space-md);
 }
 
-/* Editor Section (Bottom) */
+/* Editor Section (Bottom ~50% — toolbars + text + keyboard) */
 .app-editor-section {
   flex: 1 1 auto;
   display: flex;
