@@ -1,33 +1,38 @@
 import { useState } from 'react';
 import './LoginScreen.css';
 
-export default function LoginScreen({ onLogin }) {
+export default function LoginScreen({ onLogin, onRegister }) {
+  const [mode, setMode] = useState('login'); // 'login' or 'signup'
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
 
-    const trimmed = username.trim();
-    if (!trimmed) {
-      setError('Please enter a username');
-      return;
-    }
-    if (trimmed.length < 2) {
-      setError('Username must be at least 2 characters');
-      return;
-    }
-    if (trimmed.length > 20) {
-      setError('Username must be 20 characters or less');
-      return;
-    }
-
-    const success = onLogin(trimmed);
-    if (!success) {
-      setError('Login failed. Please try again.');
+    if (mode === 'login') {
+      const result = onLogin(username.trim(), password);
+      if (!result.success) {
+        setError(result.error);
+      }
+    } else {
+      const result = onRegister(username.trim(), password, confirmPassword);
+      if (!result.success) {
+        setError(result.error);
+      }
     }
   };
+
+  const switchMode = () => {
+    setMode(prev => prev === 'login' ? 'signup' : 'login');
+    setError('');
+    setPassword('');
+    setConfirmPassword('');
+  };
+
+  const isLogin = mode === 'login';
 
   return (
     <div className="login-container">
@@ -36,6 +41,24 @@ export default function LoginScreen({ onLogin }) {
           <div className="login-logo-icon">✦</div>
           <h1>Visual Text Editor</h1>
           <p>Create beautifully styled documents</p>
+        </div>
+
+        {/* Mode Tabs */}
+        <div className="login-tabs">
+          <button
+            className={`login-tab ${isLogin ? 'active' : ''}`}
+            onClick={() => { setMode('login'); setError(''); }}
+            type="button"
+          >
+            Login
+          </button>
+          <button
+            className={`login-tab ${!isLogin ? 'active' : ''}`}
+            onClick={() => { setMode('signup'); setError(''); }}
+            type="button"
+          >
+            Sign Up
+          </button>
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
@@ -53,20 +76,52 @@ export default function LoginScreen({ onLogin }) {
             />
           </div>
 
+          <div className="login-input-group">
+            <label htmlFor="password-input">Password</label>
+            <input
+              id="password-input"
+              className="login-input"
+              type="password"
+              placeholder={isLogin ? "Enter your password..." : "Choose a password (4+ chars)..."}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
+
+          {!isLogin && (
+            <div className="login-input-group">
+              <label htmlFor="confirm-password-input">Confirm Password</label>
+              <input
+                id="confirm-password-input"
+                className="login-input"
+                type="password"
+                placeholder="Confirm your password..."
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+          )}
+
           {error && <div className="login-error">{error}</div>}
 
           <button
             id="login-btn"
             type="submit"
             className="login-btn"
-            disabled={!username.trim()}
+            disabled={!username.trim() || !password}
           >
-            Enter Editor →
+            {isLogin ? 'Login →' : 'Create Account →'}
           </button>
         </form>
 
         <p className="login-hint">
-          New users are automatically registered
+          {isLogin ? (
+            <>Don't have an account? <button type="button" className="login-link" onClick={switchMode}>Sign Up</button></>
+          ) : (
+            <>Already have an account? <button type="button" className="login-link" onClick={switchMode}>Login</button></>
+          )}
         </p>
       </div>
     </div>

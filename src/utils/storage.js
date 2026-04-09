@@ -8,10 +8,24 @@ const DOCS_PREFIX = 'vte_docs_';
 
 // --- User Auth ---
 
+/**
+ * Get all users. Returns array of { username, password } objects.
+ * Auto-migrates old format (plain string array) to new format.
+ */
 export function getUsers() {
   try {
     const data = localStorage.getItem(USERS_KEY);
-    return data ? JSON.parse(data) : [];
+    if (!data) return [];
+    const parsed = JSON.parse(data);
+
+    // Migration: if old format (array of strings), convert to objects
+    if (parsed.length > 0 && typeof parsed[0] === 'string') {
+      const migrated = parsed.map(name => ({ username: name, password: '1234' }));
+      saveUsers(migrated);
+      return migrated;
+    }
+
+    return parsed;
   } catch {
     return [];
   }
@@ -21,12 +35,42 @@ export function saveUsers(users) {
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
 }
 
-export function registerUser(username) {
+/**
+ * Find a user by username. Returns { username, password } or null.
+ */
+export function findUser(username) {
   const users = getUsers();
-  if (!users.includes(username)) {
-    users.push(username);
-    saveUsers(users);
+  return users.find(u => u.username === username) || null;
+}
+
+/**
+ * Register a new user with username and password.
+ * Returns { success: true } or { success: false, error: string }
+ */
+export function registerUser(username, password) {
+  const users = getUsers();
+  const exists = users.find(u => u.username === username);
+  if (exists) {
+    return { success: false, error: 'Username already taken' };
   }
+  users.push({ username, password });
+  saveUsers(users);
+  return { success: true };
+}
+
+/**
+ * Validate login credentials.
+ * Returns { success: true } or { success: false, error: string }
+ */
+export function validateUser(username, password) {
+  const user = findUser(username);
+  if (!user) {
+    return { success: false, error: 'User not found' };
+  }
+  if (user.password !== password) {
+    return { success: false, error: 'Wrong password' };
+  }
+  return { success: true };
 }
 
 export function getCurrentUser() {

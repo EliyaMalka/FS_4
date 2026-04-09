@@ -1,10 +1,60 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { getUserDocuments, saveDocument, deleteDocument as deleteDocFromStorage } from '../utils/storage';
 import { createDocument } from '../utils/charFactory';
+
+const SESSION_PREFIX = 'vte_session_';
+
+function getSessionKey(username) {
+  return SESSION_PREFIX + username;
+}
+
+function loadSession(username) {
+  try {
+    const data = localStorage.getItem(getSessionKey(username));
+    if (!data) return null;
+    return JSON.parse(data);
+  } catch {
+    return null;
+  }
+}
+
+function saveSession(username, openDocs, activeDocId) {
+  if (!username) return;
+  const session = { openDocs, activeDocId };
+  localStorage.setItem(getSessionKey(username), JSON.stringify(session));
+}
 
 export function useDocuments(username) {
   const [openDocs, setOpenDocs] = useState([]);
   const [activeDocId, setActiveDocId] = useState(null);
+  const initialized = useRef(false);
+
+  // Load session when user changes (login/logout)
+  useEffect(() => {
+    if (!username) {
+      setOpenDocs([]);
+      setActiveDocId(null);
+      initialized.current = false;
+      return;
+    }
+
+    const session = loadSession(username);
+    if (session && session.openDocs && session.openDocs.length > 0) {
+      setOpenDocs(session.openDocs);
+      setActiveDocId(session.activeDocId || session.openDocs[0].id);
+    } else {
+      setOpenDocs([]);
+      setActiveDocId(null);
+    }
+    // Mark as initialized after first load
+    setTimeout(() => { initialized.current = true; }, 100);
+  }, [username]);
+
+  // Auto-save session whenever openDocs or activeDocId change
+  useEffect(() => {
+    if (!username || !initialized.current) return;
+    saveSession(username, openDocs, activeDocId);
+  }, [username, openDocs, activeDocId]);
 
   const activeDoc = openDocs.find(d => d.id === activeDocId) || null;
 

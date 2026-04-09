@@ -19,7 +19,7 @@ import FindReplaceDialog from './components/Modals/FindReplaceDialog';
 import './App.css';
 
 export default function App() {
-  const { user, isLoading, isAuthenticated, login, logout } = useAuth();
+  const { user, isLoading, isAuthenticated, login, register, logout } = useAuth();
 
   // --- Modal state ---
   const [showOpenDialog, setShowOpenDialog] = useState(false);
@@ -148,7 +148,7 @@ export default function App() {
 
   // --- Auth Gate ---
   if (!isAuthenticated) {
-    return <LoginScreen onLogin={login} />;
+    return <LoginScreen onLogin={login} onRegister={register} />;
   }
 
   // --- Pending close doc name ---
