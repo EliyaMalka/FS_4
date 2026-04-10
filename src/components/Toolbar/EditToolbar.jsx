@@ -17,7 +17,6 @@
  *   - כפתור שפה (EN/HE) — מחליף בין מקלדת אנגלית לעברית
  *   - Hide/Show KB — הצגה/הסתרה של המקלדת הווירטואלית (מוצב בצד ימין)
  */
-import { useState } from 'react';
 import './Toolbar.css';
 
 export default function EditToolbar({ editorState, onFindReplace }) {

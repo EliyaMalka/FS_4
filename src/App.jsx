@@ -36,7 +36,7 @@ export default function App() {
   // שומר את מזהה המסמך שמחכה לאישור סגירה (כשיש שינויים שלא נשמרו)
   const [pendingCloseDocId, setPendingCloseDocId] = useState(null);
   // האם חלונית העריכה מוצגת — true=מוצגת, false=רק הפתקים נראים
-  const [editorVisible, setEditorVisible] = useState(true);
+  const [editorVisible, setEditorVisible] = useState(false);
 
   // חיבור למנהל המסמכים — מקבל את כל הפונקציות לניהול מסמכים של המשתמש הנוכחי
   const docManager = useDocuments(user);
@@ -75,6 +75,7 @@ export default function App() {
   // פונקציה להצגה/הסתרה של חלונית העריכה (כפתור X)
   const handleToggleEditor = useCallback(() => {
     setEditorVisible(false);
+    setActiveDocId(null);
   }, []);
 
   // פונקציה לפתיחת חלון "Open" — מציגה את רשימת הקבצים השמורים

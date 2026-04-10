@@ -31,12 +31,9 @@ export function useAuth() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check for existing session on mount
+  // ניקוי סשן בכל הפעלה — מוודא שמסך הכניסה יוצג תמיד
   useEffect(() => {
-    const savedUser = getCurrentUser();
-    if (savedUser) {
-      setUser(savedUser);
-    }
+    clearCurrentUser();
     setIsLoading(false);
   }, []);
 

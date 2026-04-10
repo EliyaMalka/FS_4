@@ -22,10 +22,9 @@
  *   - closeDocument(docId) — סגירת מסמך
  *   - renameDocument(docId, newName) — שינוי שם מסמך
  *   - hasUnsavedChanges(docId) — בדיקה אם יש שינויים שלא נשמרו
- *   - deleteDocumentPermanently(docId) — מחיקה מ-LocalStorage לצמיתות
  */
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { getUserDocuments, saveDocument, deleteDocument as deleteDocFromStorage } from '../utils/storage';
+import { getUserDocuments, saveDocument } from '../utils/storage';
 import { createDocument } from '../utils/charFactory';
 
 const SESSION_PREFIX = 'vte_session_';
@@ -67,7 +66,7 @@ export function useDocuments(username) {
     const session = loadSession(username);
     if (session && session.openDocs && session.openDocs.length > 0) {
       setOpenDocs(session.openDocs);
-      setActiveDocId(session.activeDocId || session.openDocs[0].id);
+      setActiveDocId(null);
     } else {
       setOpenDocs([]);
       setActiveDocId(null);
@@ -179,11 +178,7 @@ export function useDocuments(username) {
     return doc.updatedAt > doc.savedAt;
   }, [openDocs]);
 
-  // Delete document from storage
-  const deleteDocumentPermanently = useCallback((docId) => {
-    deleteDocFromStorage(username, docId);
-    closeDocument(docId);
-  }, [username, closeDocument]);
+
 
   return {
     openDocs,
@@ -199,6 +194,5 @@ export function useDocuments(username) {
     updateActiveDocChars,
     renameDocument,
     hasUnsavedChanges,
-    deleteDocumentPermanently,
   };
 }
