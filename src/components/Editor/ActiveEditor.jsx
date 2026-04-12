@@ -18,14 +18,12 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
     setCursorTo,
     deleteWordBefore,
     undo,
-    // 1. הוספנו משיכה של פונקציית החיפוש מהסטייט, כדי שנוכל להשתמש בה לאיפוס
     findInText,
   } = editorState;
 
-  // פונקציית עזר קטנה שתפקידה אך ורק לנקות הדגשות
   const clearHighlightsIfExist = useCallback(() => {
     if (findHighlights && findHighlights.length > 0) {
-      findInText(''); // מחרוזת ריקה מנקה את ההדגשות
+      findInText('');
     }
   }, [findHighlights, findInText]);
 
@@ -36,7 +34,6 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
       return;
     }
 
-    // 2. כל לחיצה במקלדת הפיזית בתוך העורך מנקה את ההדגשות מיד
     clearHighlightsIfExist();
 
     // Ctrl shortcuts
@@ -103,7 +100,6 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
     <div
       className="editor-container"
       ref={containerRef}
-      // 3. הוספנו את האירוע — כל לחיצת עכבר באזור העורך מנקה את ההדגשות
       onClick={clearHighlightsIfExist}
     >
       {chars !== undefined ? (
@@ -112,7 +108,6 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
             chars={chars}
             cursorPosition={cursorPosition}
             findHighlights={findHighlights}
-            // 4. עטפנו את פעולת הזזת הסמן בתוך הפונקציה שלנו כדי שגם לחיצה על מילה תנקה
             onClickPosition={(pos) => {
               setCursorTo(pos);
               clearHighlightsIfExist();

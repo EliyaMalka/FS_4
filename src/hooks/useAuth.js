@@ -42,14 +42,13 @@ export function useAuth() {
    * Returns { success, error? }
    */
   const login = useCallback((username, password) => {
-    const trimmed = username.trim();
-    if (!trimmed) return { success: false, error: 'Please enter a username' };
+    if (!username) return { success: false, error: 'Please enter a username' };
     if (!password) return { success: false, error: 'Please enter a password' };
 
-    const result = validateUser(trimmed, password);
+    const result = validateUser(username, password);
     if (result.success) {
-      setCurrentUser(trimmed);
-      setUser(trimmed);
+      setCurrentUser(username);
+      setUser(username);
     }
     return result;
   }, []);
@@ -59,18 +58,17 @@ export function useAuth() {
    * Returns { success, error? }
    */
   const register = useCallback((username, password, confirmPassword) => {
-    const trimmed = username.trim();
-    if (!trimmed) return { success: false, error: 'Please enter a username' };
-    if (trimmed.length < 2) return { success: false, error: 'Username must be at least 2 characters' };
-    if (trimmed.length > 20) return { success: false, error: 'Username must be 20 characters or less' };
+    if (!username) return { success: false, error: 'Please enter a username' };
+    if (username.length < 2) return { success: false, error: 'Username must be at least 2 characters' };
+    if (username.length > 20) return { success: false, error: 'Username must be 20 characters or less' };
     if (!password) return { success: false, error: 'Please enter a password' };
     if (password.length < 4) return { success: false, error: 'Password must be at least 4 characters' };
     if (password !== confirmPassword) return { success: false, error: 'Passwords do not match' };
 
-    const result = registerUser(trimmed, password);
+    const result = registerUser(username, password);
     if (result.success) {
-      setCurrentUser(trimmed);
-      setUser(trimmed);
+      setCurrentUser(username);
+      setUser(username);
     }
     return result;
   }, []);
