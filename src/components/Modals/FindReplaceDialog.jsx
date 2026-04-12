@@ -1,36 +1,29 @@
-/**
- * ==============================================
- * FindReplaceDialog.jsx — חלון חיפוש והחלפה
- * ==============================================
- * חלון קופץ עם שתי פונקציות:
- *   1. חיפוש (Find) — בזמן אמת! כל תו שמקלידים בשדה Find מדגיש מיד את
- *      כל המופעים בטקסט (דרך findHighlights ב-useEditorState)
- *   2. החלפה (Replace All) — מחליף את כל המופעים של טקסט החיפוש בטקסט ההחלפה
- *
- * כפתור "Replace All" חסום (אפור) כשאין תוצאות חיפוש, ונהפך לפעיל רק כשנמצאו מופעים.
- * מציג גם ספירה: "Found X occurrence(s)" או "No matches found".
- */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './Modals.css';
 
 export default function FindReplaceDialog({ onFind, onReplace, onClose, resultCount }) {
   const [findStr, setFindStr] = useState('');
   const [replaceStr, setReplaceStr] = useState('');
 
-  // Live search as user types
-  useEffect(() => {
-    onFind(findStr);
-  }, [findStr, onFind]);
+  // 1. משתנה חדש שזוכר האם כבר לחצנו על "Find"
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Clear highlights on close
   const handleClose = () => {
-    onFind('');
     onClose();
+  };
+
+  // 2. הפונקציה של כפתור החיפוש
+  const handleFind = () => {
+    if (findStr.trim()) {
+      onFind(findStr);
+      setHasSearched(true); // עכשיו מותר להציג את שורת התוצאות!
+    }
   };
 
   const handleReplace = () => {
     if (findStr.trim()) {
       onReplace(findStr, replaceStr);
+      handleClose();
       setFindStr('');
       setReplaceStr('');
     }
@@ -51,7 +44,12 @@ export default function FindReplaceDialog({ onFind, onReplace, onClose, resultCo
               type="text"
               placeholder="Search text..."
               value={findStr}
-              onChange={(e) => setFindStr(e.target.value)}
+              // 3. כשמקלידים משהו חדש, אנחנו מנקים ומסתירים את התוצאות הישנות
+              onChange={(e) => {
+                setFindStr(e.target.value);
+                onFind('');
+                setHasSearched(false);
+              }}
               autoFocus
               id="find-input"
             />
@@ -67,7 +65,8 @@ export default function FindReplaceDialog({ onFind, onReplace, onClose, resultCo
               id="replace-input"
             />
           </div>
-          {findStr && (
+          {/* 4. מציג את התוצאות אך ורק אם לחצו על הכפתור (hasSearched הוא true) */}
+          {hasSearched && findStr && (
             <div className="find-replace-results">
               {resultCount > 0
                 ? `Found ${resultCount} occurrence(s)`
@@ -79,6 +78,15 @@ export default function FindReplaceDialog({ onFind, onReplace, onClose, resultCo
           <button className="modal-btn secondary" onClick={handleClose}>
             Close
           </button>
+
+          <button
+            className={`modal-btn ${findStr.trim() ? 'primary' : 'disabled-replace'}`}
+            onClick={handleFind}
+            disabled={!findStr.trim()}
+          >
+            Find
+          </button>
+
           <button
             className={`modal-btn ${resultCount > 0 ? 'primary' : 'disabled-replace'}`}
             onClick={handleReplace}

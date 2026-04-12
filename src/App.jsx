@@ -151,7 +151,9 @@ export default function App() {
   }, [editorState]);
 
   const handleReplace = useCallback((findStr, replaceStr) => {
-    editorState.replaceInText(findStr, replaceStr);
+    if (editorState.findInText(findStr)) {
+      editorState.replaceInText(findStr, replaceStr);
+    }
   }, [editorState]);
 
   // מצב טעינה — מציג ספינר בזמן שהמערכת בודקת אם יש משתמש מחובר

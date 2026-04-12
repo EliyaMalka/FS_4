@@ -1,22 +1,3 @@
-/**
- * ==============================================
- * ActiveEditor.jsx — קומפוננטת העריכה הראשית
- * ==============================================
- * אחראית על הצגת אזור העריכה של המסמך הפעיל. כוללת:
- *
- * 1. האזנה למקלדת פיזית (window.addEventListener('keydown'))
- *    - תווים רגילים → הכנסה לטקסט
- *    - Backspace/Delete → מחיקה
- *    - חצים → הזזת סמן
- *    - Ctrl+Z → ביטול (Undo)
- *    - Ctrl+Backspace → מחיקת מילה שלמה
- *    - מתעלם מקלט כשפוקוס על input/select (למשל בחלונות קופצים)
- *
- * 2. הצגת TextDisplay — הקומפוננטה שמרנדרת את הטקסט עם כל הסטיילינג
- *    כולל סמן מהבהב, הדגשת חיפוש, ותמיכה בלחיצה למיקום סמן
- *
- * 3. אזור הטקסט מתרחב כשהמקלדת מוסתרת (expanded mode)
- */
 import { useEffect, useCallback, useRef } from 'react';
 import TextDisplay from './TextDisplay';
 import './Editor.css';
@@ -37,7 +18,16 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
     setCursorTo,
     deleteWordBefore,
     undo,
+    // 1. הוספנו משיכה של פונקציית החיפוש מהסטייט, כדי שנוכל להשתמש בה לאיפוס
+    findInText,
   } = editorState;
+
+  // פונקציית עזר קטנה שתפקידה אך ורק לנקות הדגשות
+  const clearHighlightsIfExist = useCallback(() => {
+    if (findHighlights && findHighlights.length > 0) {
+      findInText(''); // מחרוזת ריקה מנקה את ההדגשות
+    }
+  }, [findHighlights, findInText]);
 
   // Handle physical keyboard input
   const handleKeyDown = useCallback((e) => {
@@ -45,6 +35,9 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
       return;
     }
+
+    // 2. כל לחיצה במקלדת הפיזית בתוך העורך מנקה את ההדגשות מיד
+    clearHighlightsIfExist();
 
     // Ctrl shortcuts
     if (e.ctrlKey || e.metaKey) {
@@ -98,7 +91,7 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
         }
         break;
     }
-  }, [insertChar, insertNewline, deleteCharBefore, deleteCharAt, moveCursor, undo, deleteWordBefore]);
+  }, [insertChar, insertNewline, deleteCharBefore, deleteCharAt, moveCursor, undo, deleteWordBefore, clearHighlightsIfExist]);
 
   // Attach keyboard listener
   useEffect(() => {
@@ -107,14 +100,23 @@ export default function ActiveEditor({ editorState, showKeyboard }) {
   }, [handleKeyDown]);
 
   return (
-    <div className="editor-container" ref={containerRef}>
+    <div
+      className="editor-container"
+      ref={containerRef}
+      // 3. הוספנו את האירוע — כל לחיצת עכבר באזור העורך מנקה את ההדגשות
+      onClick={clearHighlightsIfExist}
+    >
       {chars !== undefined ? (
         <div className={`text-display-wrapper ${!showKeyboard ? 'expanded' : ''}`}>
           <TextDisplay
             chars={chars}
             cursorPosition={cursorPosition}
             findHighlights={findHighlights}
-            onClickPosition={setCursorTo}
+            // 4. עטפנו את פעולת הזזת הסמן בתוך הפונקציה שלנו כדי שגם לחיצה על מילה תנקה
+            onClickPosition={(pos) => {
+              setCursorTo(pos);
+              clearHighlightsIfExist();
+            }}
             language={language}
           />
         </div>
